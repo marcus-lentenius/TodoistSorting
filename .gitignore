@@ -3,3 +3,4 @@
 /.idea/
 /src/main/resources/token.txt
 /src/test/resources/token.txt
+/src/main/java/services/ConnectionService.java
