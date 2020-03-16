@@ -1,37 +1,35 @@
 package models;
 
-import java.math.BigInteger;
-
 public class Task {
-    private BigInteger id;
-    private BigInteger project_id;
+    private Long id;
+    private Long project_id;
     private String content;
 
-    public Task(BigInteger id, BigInteger project_id, String content) {
+    public Task(Long id, Long project_id, String content) {
         this.id = id;
         this.project_id = project_id;
         this.content = content;
         addTaskToProject();
     }
 
-    public Task(BigInteger id, String content) {
+    public Task(Long id, String content) {
         this.id = id;
         this.content = content;
-        TodoistCatalog.addTask(this);
+        Catalog.addTask(this);
     }
 
     private void addTaskToProject() {
-        TodoistCatalog.getProjects().stream()
+        Catalog.getProjects().stream()
                 .filter(project -> project.getId().equals(this.project_id))
                 .findAny()
                 .ifPresent(project -> project.getTasks().add(this));
     }
 
-    public BigInteger getId() {
+    public Long getId() {
         return id;
     }
 
-    public BigInteger getProject_id() {
+    public Long getProject_id() {
         return project_id;
     }
 

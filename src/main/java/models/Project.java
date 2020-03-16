@@ -1,17 +1,16 @@
 package models;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 
 public class Project {
-    private BigInteger id;
+    private Long id;
     private String name;
     private ArrayList<Task> tasks;
 
-    public Project(BigInteger id, String name) {
+    public Project(Long id, String name) {
         this.id = id;
         this.name = name;
-        TodoistCatalog.addProject(this);
+        Catalog.addProject(this);
         tasks = new ArrayList<>();
     }
 
@@ -19,7 +18,7 @@ public class Project {
         this.tasks.add(task);
     }
 
-    public BigInteger getId() {
+    public Long getId() {
         return id;
     }
 

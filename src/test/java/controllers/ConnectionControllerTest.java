@@ -1,11 +1,9 @@
 package controllers;
 
-import enums.RequestMethod;
-import enums.Target;
+import enums.Path;
+import models.ConnectionModel;
+import models.Task;
 import org.junit.jupiter.api.*;
-import services.ConnectionService;
-
-import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -13,11 +11,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ConnectionControllerTest {
 
+    private ConnectionModel connectionModel;
+    private ConnectionController connectionController;
+    private Task task;
+
+
     @BeforeEach
     void setUp() {
-        ConnectionController.initiate(
+        connectionModel = new ConnectionModel(
                 "https://api.todoist.com/rest/v1/",
                 "src/main/resources/token.txt");
+
+        connectionController = new ConnectionController(connectionModel);
+        task = new Task(3751778066L, "testnew");
     }
 
 
@@ -25,34 +31,9 @@ class ConnectionControllerTest {
     void tearDown() {
     }
 
-    @Order(1)
     @Test
-    void readInToken() {
-        assertEquals("test", ConnectionController.readInToken("src/test/resources/token.txt"));
+    void T_get() {
+        connectionController.get(Path.TASKS.getPath());
+        assertEquals(200, connectionController.getResponseCode());
     }
-
-    @Order(2)
-    @Test
-    void connectWithProjectsTest() throws IOException {
-        ConnectionController.connect(Target.PROJECTS, RequestMethod.GET);
-        //FIXME getConnection
-        assertEquals(200, ConnectionService.getConnection().getResponseCode());
-    }
-
-    @Order(3)
-    @Test
-    void connectWithTasksTest() throws IOException {
-        ConnectionController.disconnect();
-        ConnectionController.connect(Target.TASKS, RequestMethod.GET);
-        //FIXME getConnection
-        assertEquals(200, ConnectionService.getConnection().getResponseCode());
-    }
-
-    @Order(4)
-    @Test
-    void disconnectTest() throws IOException {
-        //FIXME getConnection
-        assertEquals(200, ConnectionService.getConnection().getResponseCode());
-    }
-
 }

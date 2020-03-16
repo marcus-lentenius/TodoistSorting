@@ -1,61 +1,52 @@
 package controllers;
 
-import enums.RequestMethod;
-import enums.Target;
+import enums.Path;
+import models.Catalog;
 import models.Project;
 import models.Task;
-import models.TodoistCatalog;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import services.ConnectionService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class GetController {
-    public static void get() {
-        getProjects();
-        ConnectionController.disconnect();
+    public static void getTasks(ConnectionController connectionController) {
+        connectionController.get(Path.TASKS.getPath());
 
-        getTasks();
-        ConnectionController.disconnect();
-    }
+        JSONArray tasks = getJSON(connectionController);
 
-    public static void getProjects() {
-        ConnectionController.connect(Target.PROJECTS, RequestMethod.GET);
-
-        JSONArray projects = getJSON();
-
-        projects.forEach(project -> {
-            JSONObject obj = (JSONObject) project;
-            new Project(obj.getBigInteger("id"), obj.getString("name"));
-        });
-    }
-
-    public static void getTasks() {
-        ConnectionController.connect(Target.TASKS, RequestMethod.GET);
-
-        JSONArray tasks = getJSON();
         if (tasks != null) {
             tasks.forEach(task -> {
                 JSONObject obj = (JSONObject) task;
-                if (TodoistCatalog.getProjects().size() != 0) {
-                    new Task(obj.getBigInteger("id"), obj.getBigInteger("project_id"), obj.getString("content"));
+                if (Catalog.getProjects().size() != 0) {
+                    new Task(obj.getLong("id"), obj.getLong("project_id"), obj.getString("content"));
                 } else {
-                    new Task(obj.getBigInteger("id"), obj.getString("content"));
+                    new Task(obj.getLong("id"), obj.getString("content"));
                 }
             });
         }
     }
 
-    private static JSONArray getJSON() {
+    public static void getProjects(ConnectionController connectionController) {
+        connectionController.get(Path.PROJECTS.getPath());
+
+        JSONArray projects = getJSON(connectionController);
+
+        projects.forEach(project -> {
+            JSONObject obj = (JSONObject) project;
+            new Project(obj.getLong("id"), obj.getString("name"));
+        });
+    }
+
+    private static JSONArray getJSON(ConnectionController connectionController) {
         try {
             BufferedReader in = new BufferedReader(
                     //FIXME - getConnection
-                    new InputStreamReader(ConnectionService.getConnection().getInputStream()));
+                    new InputStreamReader(connectionController.getInputStream()));
 
-            StringBuffer content = new StringBuffer();
+            StringBuilder content = new StringBuilder();
             String inputLine;
 
             while ((inputLine = in.readLine()) != null) {
@@ -67,11 +58,10 @@ public class GetController {
             in.close();
 
             return jsonArray;
-
         } catch (IOException e) {
-            System.out.println("Read failed");
             e.printStackTrace();
         }
+
         return null;
     }
 }

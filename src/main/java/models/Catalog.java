@@ -2,15 +2,15 @@ package models;
 
 import java.util.ArrayList;
 
-public class TodoistCatalog {
-    private static TodoistCatalog instance = new TodoistCatalog();
+public class Catalog {
+    private static Catalog instance = new Catalog();
     private static ArrayList<Project> projects = new ArrayList<>();
     private static ArrayList<Task> tasksWithoutProject = new ArrayList<>();
 
-    private TodoistCatalog() {
+    private Catalog() {
     }
 
-    public static TodoistCatalog getInstance() {
+    public static Catalog getInstance() {
         return instance;
     }
 

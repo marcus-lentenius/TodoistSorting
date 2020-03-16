@@ -1,38 +1,38 @@
 package controllers;
 
-import org.junit.jupiter.api.AfterEach;
+import models.ConnectionModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import services.ConnectionService;
 
-import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GetControllerTest {
+    ConnectionModel connectionModel;
+    ConnectionController connectionController;
+    GetController getter;
+
 
     @BeforeEach
     void setUp() {
-        ConnectionController.initiate(
+        connectionModel = new ConnectionModel(
                 "https://api.todoist.com/rest/v1/",
                 "src/main/resources/token.txt");
-    }
 
-    @AfterEach
-    void tearDown() {
-    }
-
-    @Test
-    void getProjects() throws IOException {
-        GetController.getProjects();
-        assertTrue(ConnectionService.getConnection().getResponseCode() >= 200
-        && ConnectionService.getConnection().getResponseCode() < 300);
+        connectionController = new ConnectionController(connectionModel);
+//        connectionController.connect();
+//        getter = new GetController(connectionController);
     }
 
     @Test
-    void getTasks() throws IOException {
-        GetController.getTasks();
-        assertTrue(ConnectionService.getConnection().getResponseCode() >= 200
-                && ConnectionService.getConnection().getResponseCode() < 300);
+    void T_getTasks() {
+        GetController.getTasks(connectionController);
+        assertEquals(200, connectionController.getResponseCode());
     }
+
+    @Test
+    void T_getProjects() {
+        GetController.getProjects(connectionController);
+        assertEquals(200, connectionController.getResponseCode());
+    }
+
 }

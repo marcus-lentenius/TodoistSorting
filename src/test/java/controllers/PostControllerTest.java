@@ -1,37 +1,40 @@
 package controllers;
 
-import enums.Target;
+import enums.Path;
+import models.ConnectionModel;
 import models.Task;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import services.ConnectionService;
 
-import java.io.IOException;
-import java.math.BigInteger;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PostControllerTest {
 
+    private ConnectionModel connectionModel;
+    private ConnectionController connectionController;
     private Task task;
+
 
     @BeforeEach
     void setUp() {
-        ConnectionController.initiate(
+        connectionModel = new ConnectionModel(
                 "https://api.todoist.com/rest/v1/",
                 "src/main/resources/token.txt");
-        task = new Task(BigInteger.valueOf(1), "test");
-    }
 
-    @AfterEach
-    void tearDown() {
+        connectionController = new ConnectionController(connectionModel);
+        task = new Task(3751778066L, "testnew");
     }
 
     @Test
-    void updateTasks() throws IOException {
-        PostController.updateTasks(task, Target.TASKS);
-        assertTrue(ConnectionService.getConnection().getResponseCode() >= 200
-                && ConnectionService.getConnection().getResponseCode() < 300);
+    void T_post() {
+        PostController.post(Path.TASKS,task,connectionController);
+        assertEquals(200, connectionController.getResponseCode());
     }
+
+    @Test
+    void T_update() {
+        PostController.update(Path.TASKS,task,connectionController);
+        assertEquals(204, connectionController.getResponseCode());
+    }
+
 }
