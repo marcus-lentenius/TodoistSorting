@@ -28,6 +28,8 @@ public class PostController {
             os.write(task.toString().getBytes());
             os.flush();
             os.close();
+
+            System.out.println(connectionController.getResponseCode());
         } catch (IOException e) {
             e.printStackTrace();
         }
