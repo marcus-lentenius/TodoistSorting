@@ -9,19 +9,19 @@ public class Main {
     public static void main(String[] args) {
 
         // Connection setup
-
         ConnectionModel conMod = new ConnectionModel(
                 "https://api.todoist.com/rest/v1/",
                 "src/main/resources/token.txt");
 
         ConnectionController connectionController = new ConnectionController(conMod);
 
-        // Get data
+        // Fetch data
 
         GetController.getProjects(connectionController);
         GetController.getTasks(connectionController);
 
-        // Get tasks for renaming
+
+        // Add tasks
 
         Catalog.getProjects().stream()
                 .filter(project -> project.getName().equalsIgnoreCase("mat")) // refactor?
@@ -29,12 +29,16 @@ public class Main {
                 .ifPresent(project
                         -> project.getTasks()
                         .forEach(UpdateList::addTasks));
+        System.out.println("pre");
+        UpdateList.getRenamedTasks().forEach(task -> System.out.println(task.getContent()));
 
-        // Rename tasks
+        // Rename
 
-        RenameController.runFullRenaming();
+        RenameController.renameTask();
 
-//        UpdateList.getTasksToRename().forEach(task ->
+        UpdateList.getRenamedTasks().forEach(task -> System.out.println(task.getContent()));
+
+//        UpdateList.getRenamedTasks().forEach(task ->
 //                PostController.update(Path.TASKS,task,connectionController));
     }
 }
