@@ -4,6 +4,7 @@ public class Task {
     private Long id;
     private Long project_id;
     private String content;
+    private Long section_id;
 
     public Task(Long id, Long project_id, String content) {
         this.id = id;
@@ -22,7 +23,7 @@ public class Task {
         Catalog.getProjects().stream()
                 .filter(project -> project.getId().equals(this.project_id))
                 .findAny()
-                .ifPresent(project -> project.getTasks().add(this));
+                .ifPresent(project -> project.addTask(this));
     }
 
     public Long getId() {
@@ -41,10 +42,19 @@ public class Task {
         this.content = content;
     }
 
+    public Long getSection_id() {
+        return section_id;
+    }
+
+    public void setSection_id(Long section_id) {
+        this.section_id = section_id;
+    }
+
     @Override
     public String toString() {
         return "{\n" +
                 "    \"content\": \""+ content + "\",\n" +
+                "    \"section_id\": \""+ section_id + "\",\n" +
                 "    \"url\": \"https://todoist.com/showTask?id=" + id + "\"\n" + //FIXME var?
                 "}";
     }

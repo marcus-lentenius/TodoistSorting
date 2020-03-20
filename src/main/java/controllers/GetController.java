@@ -36,7 +36,8 @@ public class GetController {
 
         projects.forEach(project -> {
             JSONObject obj = (JSONObject) project;
-            new Project(obj.getLong("id"), obj.getString("name"));
+            new Project(obj.getLong("id"),
+                    obj.getString("name"));
         });
     }
 

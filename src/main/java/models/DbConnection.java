@@ -24,13 +24,10 @@ public class DbConnection {
         if (connection == null) {
             try {
                 connection = DriverManager.getConnection(dbUrl, user, password);
-                System.out.println("Ansluten");
-
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
         return connection;
     }
-
 }

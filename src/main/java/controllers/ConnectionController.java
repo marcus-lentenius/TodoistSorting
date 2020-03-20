@@ -2,19 +2,15 @@ package controllers;
 
 import enums.RequestMethod;
 import models.ConnectionModel;
-import models.Task;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class ConnectionController {
 
     private HttpURLConnection connection;
-
-    private Task taskToPost;
 
     private final String TOKEN;
     private final String API_URL;
@@ -35,12 +31,13 @@ public class ConnectionController {
 //
             if (requestMethod == RequestMethod.GET) {
                 this.connection.connect();
+            } else if (requestMethod == RequestMethod.DELETE) {
+                this.connection.connect();
+                System.out.println(connection.getResponseCode());
             } else if (requestMethod == RequestMethod.POST) {
                 this.connection.setRequestProperty("Content-Type", "application/json");
                 this.connection.setRequestProperty("X-Request", "$(uuidgen)");
                 this.connection.setDoOutput(true);
-
-//                postData();
             }
 
         } catch (IOException e) {
@@ -49,15 +46,8 @@ public class ConnectionController {
         }
     }
 
-    private void postData() {
-        try {
-        OutputStream os = this.connection.getOutputStream();
-            os.write(taskToPost.toString().getBytes());
-            os.flush();
-            os.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void delete(String path) {
+        connect(path, RequestMethod.DELETE);
     }
 
     public HttpURLConnection getConnection() {
@@ -85,7 +75,7 @@ public class ConnectionController {
     public void get(String path) {
         connect(path, RequestMethod.GET);
     }
-
+//TODO path? two methods
     public void post(String path) {
         connect(path,RequestMethod.POST);
     }

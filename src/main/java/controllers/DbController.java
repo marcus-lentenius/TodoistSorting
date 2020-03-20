@@ -4,7 +4,10 @@ import models.DbConnection;
 import models.Task;
 import models.UpdateList;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class DbController {
     private static PreparedStatement statement = null;
@@ -35,12 +38,12 @@ public class DbController {
         }
     }
 
-
-    public static String findItem(Connection connection, Task task) {
+    //TODO refactor
+    public static void renameTask(Connection connection, Task task) {
         String category = "";
 
+        // See if task is categorized
         try {
-
             statement = connection.prepareStatement(
                     "SELECT category FROM categories");
 
@@ -50,14 +53,17 @@ public class DbController {
             boolean found = false;
             while (resultSet.next()) {
                 if (task.getContent().contains(resultSet.getString(1))
-                            || task.getContent().substring(0,1).contains("_")) {
+                        || task.getContent().substring(0, 1).contains("_")) {
                     found = true;
                 }
             }
 
             if (!found) {
                 statement = connection.prepareStatement(
-                        "SELECT category FROM reference_list WHERE item = ?");
+                        "SELECT c.category FROM reference_list as r " +
+                                "JOIN categories as c " +
+                                "ON r.category_id = c.id " +
+                                "WHERE item = ?");
 
                 statement.setString(1, task.getContent());
 
@@ -74,13 +80,14 @@ public class DbController {
                     addUnknownTask(DbConnection.getConnection(), task.getContent());
                 }
 
-                task.setContent(category.concat(task.getContent()));
+                task.setContent(category.concat(task.getContent()
+                        .substring(0,1).toUpperCase()) +
+                        task.getContent().substring(1));
 
                 UpdateList.addRenamedTask(task);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return category;
     }
 }

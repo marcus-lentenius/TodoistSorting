@@ -34,5 +34,4 @@ public class Catalog {
     static void addTask(Task task) {
         tasksWithoutProject.add(task);
     }
-
 }

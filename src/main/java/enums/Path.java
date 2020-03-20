@@ -2,7 +2,8 @@ package enums;
 
 public enum Path {
     PROJECTS("projects"),
-    TASKS("tasks");
+    TASKS("tasks"),
+    SECTIONS("sections");
 
     private String s;
 

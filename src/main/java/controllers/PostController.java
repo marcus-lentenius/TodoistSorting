@@ -34,15 +34,4 @@ public class PostController {
             e.printStackTrace();
         }
     }
-//        ConnectionController.connect(target, RequestMethod.POST);
-//
-//        try {
-//            OutputStream outputStream = ConnectionService.getConnection().getOutputStream();
-//            outputStream.write(task.toString().getBytes());
-//            outputStream.flush();
-//            outputStream.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 }

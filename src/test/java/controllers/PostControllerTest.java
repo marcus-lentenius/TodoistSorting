@@ -1,12 +1,8 @@
 package controllers;
 
-import enums.Path;
 import models.ConnectionModel;
 import models.Task;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PostControllerTest {
 
@@ -25,16 +21,16 @@ class PostControllerTest {
         task = new Task(3751778066L, "testnew");
     }
 
-    @Test
-    void T_post() {
-        PostController.post(Path.TASKS,task,connectionController);
-        assertEquals(200, connectionController.getResponseCode());
-    }
+//    @Test
+//    void T_post() {
+//        PostController.post(Path.TASKS,task,connectionController);
+//        assertEquals(200, connectionController.getResponseCode());
+//    }
 
-    @Test
-    void T_update() {
-        PostController.update(Path.TASKS,task,connectionController);
-        assertEquals(204, connectionController.getResponseCode());
-    }
+//    @Test
+//    void T_update() {
+//        PostController.update(Path.TASKS,task,connectionController);
+//        assertEquals(204, connectionController.getResponseCode());
+//    }
 
 }

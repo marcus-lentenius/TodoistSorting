@@ -2,7 +2,8 @@ package enums;
 
 public enum RequestMethod {
     GET("GET"),
-    POST("POST");
+    POST("POST"),
+    DELETE("DELETE");
 
     private String request;
 

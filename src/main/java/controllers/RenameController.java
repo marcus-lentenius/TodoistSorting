@@ -10,7 +10,7 @@ import models.UpdateList;
 public class RenameController {
     public static void renameTask() {
         UpdateList.getTasks().forEach(task ->
-            DbController.findItem(DbConnection.getConnection(), task));
+            DbController.renameTask(DbConnection.getConnection(), task));
     }
 }
 
